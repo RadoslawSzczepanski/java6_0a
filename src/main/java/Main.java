@@ -16,24 +16,27 @@ import java.io.IOException;
 import java.util.Scanner;
 
 class WrongStudentName extends Exception { }
+class WrongStudentAge extends Exception { }
 
 class Main {
     public static Scanner scan = new Scanner(System.in);
 
     public static void main(String[] args) {
-        while(true) {
+        while (true) {
             try {
                 int ex = menu();
-                switch(ex) {
+                switch (ex) {
                     case 1: exercise1(); break;
                     case 2: exercise2(); break;
                     case 3: exercise3(); break;
                     default: return;
                 }
-            } catch(IOException e) {
-
-            } catch(WrongStudentName e) {
+            } catch (IOException e) {
+                System.out.println("Błąd wejścia/wyjścia!");
+            } catch (WrongStudentName e) {
                 System.out.println("Błędne imię studenta!");
+            } catch (WrongStudentAge e) {
+                System.out.println("Błędny wiek studenta!");
             }
         }
     }
@@ -48,20 +51,28 @@ class Main {
     }
 
     public static String ReadName() throws WrongStudentName {
-        scan.nextLine();
+        scan.nextLine(); 
         System.out.println("Podaj imię: ");
         String name = scan.nextLine();
-        if(name.contains(" "))
+        if (name.contains(" "))
             throw new WrongStudentName();
-
         return name;
     }
 
-    public static void exercise1() throws IOException, WrongStudentName {
-        var name = ReadName();
+    public static int ReadAge() throws WrongStudentAge {
         System.out.println("Podaj wiek: ");
-        var age = scan.nextInt();
-        scan.nextLine();
+        if (!scan.hasNextInt()) {
+            scan.next(); 
+            throw new WrongStudentAge();
+        }
+        int age = scan.nextInt();
+        scan.nextLine(); 
+        return age;
+    }
+
+    public static void exercise1() throws IOException, WrongStudentName, WrongStudentAge {
+        var name = ReadName();
+        var age = ReadAge();
         System.out.println("Podaj datę urodzenia DD-MM-YYYY");
         var date = scan.nextLine();
         (new Service()).addStudent(new Student(name, age, date));
@@ -69,7 +80,7 @@ class Main {
 
     public static void exercise2() throws IOException {
         var students = (new Service()).getStudents();
-        for(Student current : students) {
+        for (Student current : students) {
             System.out.println(current.ToString());
         }
     }
@@ -79,7 +90,7 @@ class Main {
         System.out.println("Podaj imię: ");
         var name = scan.nextLine();
         var wanted = (new Service()).findStudentByName(name);
-        if(wanted == null)
+        if (wanted == null)
             System.out.println("Nie znaleziono...");
         else {
             System.out.println("Znaleziono: ");
@@ -87,3 +98,5 @@ class Main {
         }
     }
 }
+
+
