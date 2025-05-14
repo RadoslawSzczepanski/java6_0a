@@ -17,6 +17,7 @@ import java.util.Scanner;
 
 class WrongStudentName extends Exception { }
 class WrongStudentAge extends Exception { }
+class WrongStudentDate extends Exception { }
 
 class Main {
     public static Scanner scan = new Scanner(System.in);
@@ -36,7 +37,10 @@ class Main {
             } catch (WrongStudentName e) {
                 System.out.println("Błędne imię studenta!");
             } catch (WrongStudentAge e) {
-                System.out.println("Błędny wiek studenta");            }
+                System.out.println("Wiek musi być liczbą z przedziału 1-99!");
+            } catch (WrongStudentDate e) {
+                System.out.println("Błędna data urodzenia!");
+            }
         }
     }
 
@@ -50,7 +54,7 @@ class Main {
     }
 
     public static String ReadName() throws WrongStudentName {
-        scan.nextLine(); 
+        scan.nextLine();
         System.out.println("Podaj imię: ");
         String name = scan.nextLine();
         if (name.contains(" "))
@@ -61,22 +65,30 @@ class Main {
     public static int ReadAge() throws WrongStudentAge {
         System.out.println("Podaj wiek: ");
         if (!scan.hasNextInt()) {
-            scan.next(); 
+            scan.next();
             throw new WrongStudentAge();
         }
         int age = scan.nextInt();
-        scan.nextLine(); 
+        scan.nextLine();
         if (age < 1 || age > 99) {
             throw new WrongStudentAge();
         }
         return age;
     }
 
-    public static void exercise1() throws IOException, WrongStudentName, WrongStudentAge {
+    public static String ReadDate() throws WrongStudentDate {
+        System.out.println("Podaj datę urodzenia DD-MM-YYYY");
+        String date = scan.nextLine();
+        if (!date.matches("\\d{2}-\\d{2}-\\d{4}")) {
+            throw new WrongStudentDate();
+        }
+        return date;
+    }
+
+    public static void exercise1() throws IOException, WrongStudentName, WrongStudentAge, WrongStudentDate {
         var name = ReadName();
         var age = ReadAge();
-        System.out.println("Podaj datę urodzenia DD-MM-YYYY");
-        var date = scan.nextLine();
+        var date = ReadDate();
         (new Service()).addStudent(new Student(name, age, date));
     }
 
@@ -100,6 +112,7 @@ class Main {
         }
     }
 }
+
 
 
 
