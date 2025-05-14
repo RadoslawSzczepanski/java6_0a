@@ -36,8 +36,7 @@ class Main {
             } catch (WrongStudentName e) {
                 System.out.println("Błędne imię studenta!");
             } catch (WrongStudentAge e) {
-                System.out.println("Błędny wiek studenta!");
-            }
+                System.out.println("Błędny wiek studenta");            }
         }
     }
 
@@ -67,6 +66,9 @@ class Main {
         }
         int age = scan.nextInt();
         scan.nextLine(); 
+        if (age < 1 || age > 99) {
+            throw new WrongStudentAge();
+        }
         return age;
     }
 
@@ -98,5 +100,6 @@ class Main {
         }
     }
 }
+
 
 
